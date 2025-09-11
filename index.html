@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Strands Clone</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="app-header">
+        <h1 class="title">Strands Clone</h1>
+        <div class="controls">
+          <select id="puzzleSelect" aria-label="Select puzzle"></select>
+          <button
+            id="themeToggle"
+            class="theme-toggle"
+            type="button"
+            title="Toggle dark mode"
+            aria-label="Toggle dark mode"
+          >
+            <span id="themeIcon" class="icon" aria-hidden="true">☀️</span>
+          </button>
+          <button id="restartBtn" type="button">Clear</button>
+        </div>
+      </header>
+
+      <section class="meta">
+        <div class="theme">
+          <strong>Theme:</strong> <span id="themeText">Loading…</span>
+        </div>
+        <div class="status" id="statusText">
+          Find all words and the spangram.
+        </div>
+      </section>
+
+      <section class="tracker">
+        <div id="currentSelection" class="current-selection" aria-live="polite">
+          &nbsp;
+        </div>
+      </section>
+
+      <main class="board-container">
+        <div
+          id="board"
+          class="board"
+          aria-label="Letter grid"
+          role="grid"
+        ></div>
+        <svg id="pathOverlay" class="overlay" aria-hidden="true"></svg>
+      </main>
+
+      <section class="found">
+        <h2 id="foundHeader">words found: 0 of 0</h2>
+        <ul id="foundList" class="found-list"></ul>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
