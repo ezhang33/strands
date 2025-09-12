@@ -200,6 +200,12 @@ let isMouseDown = false;
 let lockedPaths = [];
 /** @type {number[]|null} */
 let lastIncorrectPath = null;
+/** @type {string|null} */
+let lastCorrectWord = null;
+/** @type {boolean} */
+let lastCorrectIsSpangram = false;
+/** @type {string|null} */
+let lastIncorrectWord = null;
 
 /** @type {Set<string>} */
 let foundWords = new Set();
@@ -268,6 +274,9 @@ function loadPuzzle(id, forceRestart = false) {
   spangramFound = false;
   lockedPaths = [];
   lastIncorrectPath = null;
+  lastCorrectWord = null;
+  lastCorrectIsSpangram = false;
+  lastIncorrectWord = null;
   renderFound();
   renderBoard(p.grid);
 }
@@ -345,6 +354,9 @@ function startPath(idx) {
     redrawPath();
   }
   activePath = [idx];
+  lastCorrectWord = null;
+  lastCorrectIsSpangram = false;
+  lastIncorrectWord = null;
   getTile(idx).classList.add("selected");
   redrawPath();
   updateSelectionTracker();
@@ -386,6 +398,9 @@ function commitPath() {
     });
     renderFound();
     setStatus(isSpangram ? `Spangram found: ${upper}!` : `Found: ${upper}`);
+    // show correct word in tracker until next click
+    lastCorrectWord = isSpangram ? "Spangram Found!" : upper;
+    lastCorrectIsSpangram = isSpangram;
     // clear active path so only locked color draws
     activePath = [];
     // redraw on next frame so classes are fully applied before sampling colors
@@ -395,12 +410,13 @@ function commitPath() {
   } else {
     // show incorrect path lines and keep until next click
     lastIncorrectPath = [...activePath];
+    lastIncorrectWord = "Not in word list";
     redrawPath();
     flashIncorrect();
+    activePath = [];
+    redrawPath();
+    updateSelectionTracker();
   }
-  activePath = [];
-  redrawPath();
-  updateSelectionTracker();
 }
 
 function renderFound() {
@@ -477,12 +493,34 @@ function tileIndexFromEvent(e) {
 
 function updateSelectionTracker() {
   if (!currentSelectionEl) return;
-  if (!currentPuzzle || activePath.length === 0) {
-    currentSelectionEl.textContent = "\u00A0"; // non-breaking space to preserve height
+
+  // Show correct word if present (highest priority)
+  if (lastCorrectWord) {
+    currentSelectionEl.textContent = lastCorrectWord;
+    currentSelectionEl.className = lastCorrectIsSpangram
+      ? "current-selection spangram"
+      : "current-selection correct";
     return;
   }
-  const text = activePath.map((i) => currentPuzzle.grid[i]).join("");
-  currentSelectionEl.textContent = text;
+
+  // Show incorrect message if present
+  if (lastIncorrectWord) {
+    currentSelectionEl.textContent = lastIncorrectWord;
+    currentSelectionEl.className = "current-selection incorrect";
+    return;
+  }
+
+  // Show current selection if we have an active path
+  if (currentPuzzle && activePath.length > 0) {
+    const text = activePath.map((i) => currentPuzzle.grid[i]).join("");
+    currentSelectionEl.textContent = text;
+    currentSelectionEl.className = "current-selection";
+    return;
+  }
+
+  // Otherwise show empty state
+  currentSelectionEl.textContent = "\u00A0"; // non-breaking space to preserve height
+  currentSelectionEl.className = "current-selection";
 }
 
 function redrawPath() {

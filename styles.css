@@ -99,12 +99,18 @@ body {
   min-height: 28px;
   display: inline-flex;
   align-items: center;
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: var(--panel);
-  border: 1px solid var(--tile-border);
   font-weight: 700;
   letter-spacing: 0.04em;
+  color: var(--text);
+}
+.current-selection.correct {
+  color: var(--accent);
+}
+.current-selection.incorrect {
+  color: var(--error);
+}
+.current-selection.spangram {
+  color: var(--warn);
 }
 
 .board-container {
