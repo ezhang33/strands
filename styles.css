@@ -247,9 +247,118 @@ body {
   display: inline-block;
 }
 
+/* Victory celebration styles */
+.celebration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.5s ease;
+}
+
+.celebration.hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.celebration-content {
+  text-align: center;
+  z-index: 1001;
+}
+
+.celebration-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 1rem 0;
+  animation: bounce 1s ease-in-out infinite alternate;
+}
+
+.celebration-message {
+  font-size: 1.5rem;
+  color: #fff;
+  margin: 0;
+  animation: fadeInUp 1s ease-out 0.5s both;
+}
+
+.balloon-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.balloon {
+  position: absolute;
+  font-size: 3rem;
+  animation: balloon-rise linear forwards;
+  /* Start balloons off-screen at bottom */
+  transform: translateY(120vh);
+  opacity: 0;
+}
+
+@keyframes balloon-rise {
+  0% {
+    transform: translateY(120vh) translateX(0px) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(50vh) translateX(20px) rotate(5deg);
+    opacity: 0.9;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-20vh) translateX(-20px) rotate(-5deg);
+    opacity: 0;
+  }
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 640px) {
   .tile {
     width: 46px;
     height: 46px;
+  }
+
+  .celebration-title {
+    font-size: 2rem;
+  }
+
+  .celebration-message {
+    font-size: 1.2rem;
   }
 }

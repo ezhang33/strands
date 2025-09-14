@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Strands Clone</title>
+    <title>Happy Birthday!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -15,9 +15,13 @@
   <body>
     <div class="app">
       <header class="app-header">
-        <h1 class="title">Strands Clone</h1>
+        <h1 class="title">Happy Birthday!</h1>
         <div class="controls">
-          <select id="puzzleSelect" aria-label="Select puzzle"></select>
+          <select
+            id="puzzleSelect"
+            aria-label="Select puzzle"
+            style="display: none"
+          ></select>
           <button
             id="themeToggle"
             class="theme-toggle"
@@ -33,7 +37,7 @@
 
       <section class="meta">
         <div class="theme">
-          <strong>Theme:</strong> <span id="themeText">Loading…</span>
+          <strong>Theme:</strong> <span id="themeText">Feeling 22</span>
         </div>
         <div class="status" id="statusText">
           Find all words and the spangram.
@@ -57,9 +61,20 @@
       </main>
 
       <section class="found">
-        <h2 id="foundHeader">words found: 0 of 0</h2>
+        <h2 id="foundHeader">Words found: 0 of 0</h2>
         <ul id="foundList" class="found-list"></ul>
       </section>
+    </div>
+
+    <!-- Victory celebration -->
+    <div id="celebration" class="celebration hidden">
+      <div class="celebration-content">
+        <h1 class="celebration-title">🎉 Happy Birthday! 🎉</h1>
+        <p class="celebration-message">
+          I don't know about you, but I'm feeling 22!
+        </p>
+      </div>
+      <div id="balloon-container" class="balloon-container"></div>
     </div>
 
     <script src="script.js"></script>

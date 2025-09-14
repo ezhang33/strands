@@ -5,91 +5,58 @@
 /** @type {Puzzle[]} */
 const PUZZLES = [
   {
-    id: "demo-1",
-    theme: "Fruits",
+    id: "daphne",
+    theme: "Feeling 22",
     grid: [
       "A",
       "P",
       "P",
       "L",
       "E",
-      "O",
-      "R",
-      "G",
-      "B",
-      "A",
-      "N",
-      "A",
-      "N",
-      "A",
-      "G",
-      "R",
-      "P",
-      "E",
-      "A",
-      "C",
-      "H",
-      "K",
-      "I",
-      "W",
-      "M",
-      "A",
-      "N",
-      "G",
-      "O",
-      "L",
-      "E",
-      "M",
-      "C",
-      "H",
-      "E",
-      "R",
-      "R",
-      "Y",
-      "L",
-      "I",
-      "L",
-      "I",
-      "M",
-      "E",
-      "B",
-      "E",
-      "R",
-      "R",
-      "P",
-      "L",
-      "U",
-      "M",
-      "G",
-      "R",
+      "S",
       "A",
       "P",
-      "O",
-      "R",
-      "A",
-      "N",
-      "G",
+      "P",
+      "L",
       "E",
       "S",
+      "A",
+      "P",
+      "P",
+      "L",
+      "E",
+      "S",
+      "A",
+      "P",
+      "P",
+      "L",
+      "E",
+      "S",
+      "A",
+      "P",
+      "P",
+      "L",
+      "E",
+      "S",
+      "A",
+      "P",
+      "P",
+      "L",
+      "E",
+      "S",
+      "A",
+      "P",
+      "P",
+      "L",
+      "E",
       "S",
     ],
-    words: [
-      "ORANGE",
-      "BANANA",
-      "PEACH",
-      "MANGO",
-      "CHERRY",
-      "LIME",
-      "PLUM",
-      "GRAPE",
-      "BERRY",
-      "KIWI",
-    ],
+    words: ["APPLES"],
     spangram: "APPLE",
   },
   {
-    id: "demo-2",
-    theme: "Programming Languages",
+    id: "cathy",
+    theme: "I love you so much",
     grid: [
       "P",
       "Y",
@@ -185,6 +152,8 @@ const puzzleSelect = document.getElementById("puzzleSelect");
 const themeToggle = document.getElementById("themeToggle");
 const themeIcon = document.getElementById("themeIcon");
 const currentSelectionEl = document.getElementById("currentSelection");
+const celebrationEl = document.getElementById("celebration");
+const balloonContainer = document.getElementById("balloon-container");
 
 /** @type {Puzzle|null} */
 let currentPuzzle = null;
@@ -230,17 +199,7 @@ function init() {
     });
   }
 
-  // populate puzzle selector
-  PUZZLES.forEach((p) => {
-    const opt = document.createElement("option");
-    opt.value = p.id;
-    opt.textContent = `${p.id} – ${p.theme}`;
-    puzzleSelect.appendChild(opt);
-  });
-  puzzleSelect.addEventListener("change", () => loadPuzzle(puzzleSelect.value));
-  restartBtn.addEventListener("click", () =>
-    loadPuzzle(puzzleSelect.value, true)
-  );
+  restartBtn.addEventListener("click", () => loadPuzzle(PUZZLES[0].id, true));
   loadPuzzle(PUZZLES[0].id);
 }
 
@@ -267,7 +226,7 @@ function updateThemeIcon(mode) {
 function loadPuzzle(id, forceRestart = false) {
   const p = PUZZLES.find((x) => x.id === id) || PUZZLES[0];
   currentPuzzle = p;
-  puzzleSelect.value = p.id;
+  if (puzzleSelect) puzzleSelect.value = p.id;
   themeTextEl.textContent = p.theme;
   statusTextEl.textContent = "Find all words and the spangram.";
   foundWords = new Set();
@@ -279,6 +238,8 @@ function loadPuzzle(id, forceRestart = false) {
   lastIncorrectWord = null;
   renderFound();
   renderBoard(p.grid);
+  // Hide celebration when loading new puzzle
+  if (celebrationEl) celebrationEl.classList.add("hidden");
 }
 
 /** @param {string[]} letters */
@@ -437,6 +398,11 @@ function renderFound() {
   const foundCount = words.length;
   if (foundHeaderEl) {
     foundHeaderEl.textContent = `Words Found: ${foundCount} of ${totalWords}`;
+  }
+
+  // Check if all words are found and trigger celebration
+  if (foundCount === totalWords) {
+    setTimeout(() => triggerCelebration(), 500); // Small delay for effect
   }
 }
 
@@ -636,5 +602,55 @@ function statusColorForSegment(tileIndex, status) {
 }
 
 window.addEventListener("resize", () => redrawPath());
+
+function triggerCelebration() {
+  if (!celebrationEl) return;
+
+  // Show celebration overlay
+  celebrationEl.classList.remove("hidden");
+
+  // Create balloons
+  createBalloons();
+
+  // Hide celebration after 8 seconds
+  setTimeout(() => {
+    celebrationEl.classList.add("hidden");
+    if (balloonContainer) balloonContainer.innerHTML = ""; // Clear balloons
+  }, 7500);
+
+  // Click anywhere to dismiss
+  celebrationEl.addEventListener("click", () => {
+    celebrationEl.classList.add("hidden");
+    if (balloonContainer) balloonContainer.innerHTML = "";
+  });
+}
+
+function createBalloons() {
+  if (!balloonContainer) return;
+
+  // Array of celebration emojis
+  const celebrationEmojis = ["🎈", "🎊", "🎂"];
+
+  // Create 50 celebration elements
+  for (let i = 0; i < 50; i++) {
+    const balloon = document.createElement("div");
+    balloon.className = "balloon";
+
+    // Randomly pick from balloons, party poppers, and cakes
+    balloon.textContent =
+      celebrationEmojis[Math.floor(Math.random() * celebrationEmojis.length)];
+
+    // Random horizontal position
+    balloon.style.left = Math.random() * 100 + "%";
+
+    // Random animation delay (start after 0.5s minimum)
+    balloon.style.animationDelay = Math.random() * 2 + 0.5 + "s";
+
+    // Random animation duration
+    balloon.style.animationDuration = Math.random() * 2 + 3 + "s";
+
+    balloonContainer.appendChild(balloon);
+  }
+}
 
 document.addEventListener("DOMContentLoaded", init);
