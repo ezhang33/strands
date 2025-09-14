@@ -1,6 +1,8 @@
-# Strands Clone
+# Birthday Strands
 
-A lightweight, static Strands-like word game inspired by the New York Times Strands puzzle. No build step required — just open `index.html`.
+A lightweight, static Strands-like word game inspired by the New York Times Strands puzzle.
+
+Made for Daphne's 22nd Birthday present.
 
 ## Features
 
@@ -16,4 +18,3 @@ A lightweight, static Strands-like word game inspired by the New York Times Stra
   - Yellow for spangram
   - Red flash for incorrect words
 - Victory celebration with "Happy Birthday!" message and floating emojis
-- Single hardcoded puzzle (demo puzzle selector removed)
