@@ -4,140 +4,117 @@
 
 /** @type {Puzzle[]} */
 const PUZZLES = [
-  {
-    id: "daphne",
-    theme: "Feeling 22",
-    grid: [
-      "A",
-      "P",
-      "P",
-      "L",
-      "E",
-      "S",
-      "A",
-      "P",
-      "P",
-      "L",
-      "E",
-      "S",
-      "A",
-      "P",
-      "P",
-      "L",
-      "E",
-      "S",
-      "A",
-      "P",
-      "P",
-      "L",
-      "E",
-      "S",
-      "A",
-      "P",
-      "P",
-      "L",
-      "E",
-      "S",
-      "A",
-      "P",
-      "P",
-      "L",
-      "E",
-      "S",
-      "A",
-      "P",
-      "P",
-      "L",
-      "E",
-      "S",
-    ],
-    words: ["APPLES"],
-    spangram: "APPLE",
-  },
+  // {
+  //   id: "daphne",
+  //   theme: "Feeling 22",
+  //   grid: [
+  //     "R",
+  //     "R",
+  //     "D",
+  //     "T",
+  //     "C",
+  //     "O",
+  //     "E",
+  //     "D",
+  //     "Y",
+  //     "A",
+  //     "O",
+  //     "D",
+  //     "J",
+  //     "R",
+  //     "P",
+  //     "R",
+  //     "N",
+  //     "T",
+  //     "N",
+  //     "F",
+  //     "O",
+  //     "H",
+  //     "E",
+  //     "I",
+  //     "A",
+  //     "T",
+  //     "N",
+  //     "Y",
+  //     "W",
+  //     "H",
+  //     "S",
+  //     "L",
+  //     "M",
+  //     "E",
+  //     "R",
+  //     "E",
+  //     "E",
+  //     "I",
+  //     "Y",
+  //     "K",
+  //     "S",
+  //     "N",
+  //     "A",
+  //     "H",
+  //     "C",
+  //     "U",
+  //     "I",
+  //     "N",
+  //   ],
+  //   words: ["DOCTOR", "JERRY", "MICHAEL", "SKINNER", "STANFORD", "WHITNEY"],
+  //   spangram: "DAPHNEYU",
+  // },
   {
     id: "cathy",
     theme: "I love you so much",
     grid: [
-      "P",
-      "Y",
-      "T",
-      "H",
-      "O",
-      "N",
-      "J",
-      "S",
-      "R",
-      "U",
-      "B",
-      "Y",
-      "S",
-      "W",
       "I",
-      "F",
-      "J",
-      "A",
-      "V",
-      "A",
-      "G",
-      "O",
+      "M",
+      "I",
       "T",
-      "S",
       "R",
-      "U",
       "S",
-      "T",
+      "N",
+      "S",
       "K",
+      "L",
+      "A",
+      "M",
+      "E",
+      "I",
       "O",
+      "T",
+      "S",
+      "I",
+      "A",
+      "C",
+      "N",
+      "V",
+      "R",
+      "C",
+      "R",
+      "S",
+      "E",
+      "U",
+      "L",
+      "A",
+      "E",
+      "N",
+      "G",
+      "Y",
+      "F",
+      "I",
+      "I",
+      "S",
+      "O",
+      "E",
+      "B",
       "T",
       "L",
+      "B",
       "I",
-      "N",
-      "C",
-      "S",
-      "H",
+      "U",
       "A",
-      "R",
-      "P",
-      "N",
-      "O",
-      "D",
-      "E",
-      "J",
-      "S",
-      "P",
-      "H",
-      "T",
-      "Y",
-      "P",
-      "E",
-      "S",
-      "C",
-      "R",
-      "I",
-      "P",
-      "T",
-      "J",
-      "A",
-      "V",
-      "A",
-      "S",
-      "C",
+      "U",
     ],
-    words: [
-      "PYTHON",
-      "RUBY",
-      "SWIFT",
-      "JAVA",
-      "GO",
-      "RUST",
-      "KOTLIN",
-      "CSHARP",
-      "NODEJS",
-      "TYPES",
-      "SCRIPT",
-      "JAVASCRIPT",
-    ],
-    spangram: "PROGRAMMING",
+    words: ["BEAUTIFUL", "MINE", "RACIST", "SIBLINGS", "SKINCARE", "SMART"],
+    spangram: "ILOVEYOU",
   },
 ];
 
@@ -148,6 +125,7 @@ const foundHeaderEl = document.getElementById("foundHeader");
 const statusTextEl = document.getElementById("statusText");
 const themeTextEl = document.getElementById("themeText");
 const restartBtn = document.getElementById("restartBtn");
+const hintBtn = document.getElementById("hintBtn");
 const puzzleSelect = document.getElementById("puzzleSelect");
 const themeToggle = document.getElementById("themeToggle");
 const themeIcon = document.getElementById("themeIcon");
@@ -176,6 +154,10 @@ let lastCorrectIsSpangram = false;
 /** @type {string|null} */
 let lastIncorrectWord = null;
 
+// For hint system
+/** @type {string|null} */
+let currentHintWord = null;
+
 /** @type {Set<string>} */
 let foundWords = new Set();
 let spangramFound = false;
@@ -200,6 +182,7 @@ function init() {
   }
 
   restartBtn.addEventListener("click", () => loadPuzzle(PUZZLES[0].id, true));
+  hintBtn.addEventListener("click", showHint);
   loadPuzzle(PUZZLES[0].id);
 }
 
@@ -236,6 +219,7 @@ function loadPuzzle(id, forceRestart = false) {
   lastCorrectWord = null;
   lastCorrectIsSpangram = false;
   lastIncorrectWord = null;
+  currentHintWord = null;
   renderFound();
   renderBoard(p.grid);
   // Hide celebration when loading new puzzle
@@ -325,7 +309,24 @@ function startPath(idx) {
 
 function extendPath(idx) {
   if (activePath.length && activePath[activePath.length - 1] === idx) return;
-  if (activePath.includes(idx)) return; // simple: no revisiting
+
+  // Check if this tile is already in the current path (backtracking)
+  const existingIndex = activePath.indexOf(idx);
+  if (existingIndex !== -1) {
+    // User is backtracking - truncate path to this point
+    const oldPath = [...activePath];
+    activePath = activePath.slice(0, existingIndex + 1);
+
+    // Clear selection classes from tiles that are no longer in the path
+    for (let i = existingIndex + 1; i < oldPath.length; i++) {
+      getTile(oldPath[i]).classList.remove("selected");
+    }
+
+    redrawPath();
+    updateSelectionTracker();
+    return;
+  }
+
   if (activePath.length > 0) {
     const prev = activePath[activePath.length - 1];
     if (!areNeighbors(prev, idx)) return;
@@ -351,6 +352,12 @@ function commitPath() {
   if (isValid) {
     foundWords.add(upper);
     if (isSpangram) spangramFound = true;
+
+    // Clear hint if user found the hinted word
+    if (currentHintWord === upper) {
+      clearHints();
+      currentHintWord = null;
+    }
     lockPath(isSpangram ? "spangram" : "locked");
     // persist the path lines for locked words
     lockedPaths.push({
@@ -651,6 +658,94 @@ function createBalloons() {
 
     balloonContainer.appendChild(balloon);
   }
+}
+
+function showHint() {
+  if (!currentPuzzle) return;
+
+  // Clear any existing hints
+  clearHints();
+
+  // Get all unfound words (including spangram)
+  const unfoundWords = [];
+
+  // Add regular words that haven't been found
+  for (const word of currentPuzzle.words) {
+    if (!foundWords.has(word)) {
+      unfoundWords.push({ word, isSpangram: false });
+    }
+  }
+
+  // Don't include spangram in hints - let users find it themselves!
+
+  if (unfoundWords.length === 0) return; // All words found
+
+  // Pick a random unfound word
+  const randomWord =
+    unfoundWords[Math.floor(Math.random() * unfoundWords.length)];
+
+  // Find the path for this word in the grid
+  const wordPath = findWordPath(randomWord.word);
+
+  if (wordPath) {
+    // Store the current hint word
+    currentHintWord = randomWord.word;
+
+    // Highlight the tiles for this word
+    for (const tileIndex of wordPath) {
+      const tile = getTile(tileIndex);
+      if (tile) {
+        tile.classList.add("hint");
+      }
+    }
+
+    // Hint will stay until user finds the word (no timeout)
+  }
+}
+
+function clearHints() {
+  const hintTiles = boardEl.querySelectorAll(".tile.hint");
+  for (const tile of hintTiles) {
+    tile.classList.remove("hint");
+  }
+}
+
+function findWordPath(targetWord) {
+  if (!currentPuzzle) return null;
+
+  // Try starting from each tile
+  for (
+    let startIndex = 0;
+    startIndex < currentPuzzle.grid.length;
+    startIndex++
+  ) {
+    if (currentPuzzle.grid[startIndex] === targetWord[0]) {
+      const path = findPathFromTile(startIndex, targetWord, []);
+      if (path) return path;
+    }
+  }
+  return null;
+}
+
+function findPathFromTile(currentIndex, remainingWord, currentPath) {
+  if (remainingWord.length === 0) return currentPath;
+  if (currentPath.includes(currentIndex)) return null; // Already visited
+  if (currentPuzzle.grid[currentIndex] !== remainingWord[0]) return null;
+
+  const newPath = [...currentPath, currentIndex];
+  const newRemainingWord = remainingWord.slice(1);
+
+  if (newRemainingWord.length === 0) return newPath; // Found complete word
+
+  // Try all neighbors
+  for (let i = 0; i < currentPuzzle.grid.length; i++) {
+    if (areNeighbors(currentIndex, i) && !newPath.includes(i)) {
+      const result = findPathFromTile(i, newRemainingWord, newPath);
+      if (result) return result;
+    }
+  }
+
+  return null; // No valid path found
 }
 
 document.addEventListener("DOMContentLoaded", init);

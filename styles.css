@@ -176,6 +176,41 @@ body {
   color: #991b1b;
 }
 
+.tile.hint {
+  background: #3498db;
+  border-color: #2980b9;
+  color: white;
+  animation: hint-pulse 2s ease-in-out;
+}
+
+/* Selected state takes priority over hint state */
+.tile.hint.selected {
+  background: #dbeafe;
+  border-color: #bfdbfe;
+  color: var(--text);
+  animation: none;
+}
+
+/* Incorrect state takes priority over hint state */
+.tile.hint.incorrect {
+  background: #ff8888;
+  border-color: #c55555;
+  color: #991b1b;
+  animation: none;
+}
+
+@keyframes hint-pulse {
+  0%,
+  100% {
+    background: #3498db;
+    transform: scale(1);
+  }
+  50% {
+    background: #2980b9;
+    transform: scale(1.05);
+  }
+}
+
 /* Dark-specific states */
 :root[data-theme="dark"] .tile.selected {
   background: #3d63a3;
@@ -195,6 +230,28 @@ body {
   background: #4c0f0f;
   border-color: #6a2c32;
   color: #c87c7c;
+}
+
+:root[data-theme="dark"] .tile.hint {
+  background: #2980b9;
+  border-color: #1f5f8b;
+  color: white;
+}
+
+/* Selected state takes priority over hint state in dark mode too */
+:root[data-theme="dark"] .tile.hint.selected {
+  background: #3d63a3;
+  border-color: #2f4566;
+  color: var(--text);
+  animation: none;
+}
+
+/* Incorrect state takes priority over hint state in dark mode too */
+:root[data-theme="dark"] .tile.hint.incorrect {
+  background: #4c0f0f;
+  border-color: #6a2c32;
+  color: #c87c7c;
+  animation: none;
 }
 
 .found {
